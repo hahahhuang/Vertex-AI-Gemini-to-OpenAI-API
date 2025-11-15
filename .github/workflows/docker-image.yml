@@ -1,18 +1,32 @@
-name: Docker Image CI
+name: Docker Build and Publish
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - master
+      - main
+    tags:
+      - 'v*'
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-
-  build:
-
+  build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+  
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag vertex2api:$(date +%s)
