@@ -25,4 +25,4 @@ jobs:
         uses: actions/checkout@v4
   
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag vertex2api:$(date +%s)
+        run: docker-compose --build -d
